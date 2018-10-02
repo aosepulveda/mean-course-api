@@ -13,7 +13,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/api/posts', (req, res, next) => {
+app.get('/api/posts', (req, res, next) => {
   const posts = [
     { id: 'ffas123', title: 'First server-side post', content: 'this is the first post\'s content' },
     { id: 'sdsa212', title: 'Second server-side post', content: 'this is the second post\'s content' },

@@ -46,10 +46,19 @@ app.post('/api/posts', (req, res, next) => {
     title: req.body.title,
     content: req.body.content
   });
-  post.save();
-  res.status(201).json({
-    message: 'Posts added successfully!'
-  });
+  post.save()
+    .then((createdPost) => {
+      res.status(201).json({
+        message: 'Posts added successfully!',
+        postId: createdPost._id
+      });
+    })
+    .catch((e) => {
+      console.error(e);
+      res.status(404).json({
+        message: 'Post can\'t be saved!'
+      });
+    });
 });
 
 app.delete('/api/posts/:id', (req, res, next) => {

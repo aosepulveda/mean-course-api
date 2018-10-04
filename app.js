@@ -36,7 +36,7 @@ app.get('/api/posts', (req, res, next) => {
     .catch((e) => {
       console.error(e);
       res.status(404).json({
-        message: 'Posts can\'t be fetched'
+        message: 'Posts can\'t be fetched!'
       });
     });
 });
@@ -50,6 +50,19 @@ app.post('/api/posts', (req, res, next) => {
   res.status(201).json({
     message: 'Posts added successfully!'
   });
+});
+
+app.delete('/api/posts/:id', (req, res, next) => {
+  Post.deleteOne({ _id: req.params.id })
+    .then(() => {
+      res.status(200).json({ message: 'Post deleted!' });
+    })
+    .catch((e) => {
+      console.error(e);
+      res.status(404).json({
+        message: 'Post can\'t be deleted!'
+      });
+    });
 });
 
 module.exports = app;

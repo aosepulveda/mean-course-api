@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const Post = require('../models/post');
+const checkAuth = require('../middleware/check-auth');
 
 router.get('', (req, res, next) => {
   Post.find()
@@ -12,7 +13,6 @@ router.get('', (req, res, next) => {
       });
     })
     .catch((e) => {
-      console.error(e);
       res.status(404).json({
         message: 'Posts can\'t be fetched!'
       });
@@ -30,7 +30,7 @@ router.get('/:id', (req, res, next) => {
     })
 });
 
-router.post('', (req, res, next) => {
+router.post('', checkAuth, (req, res, next) => {
   const post = new Post({
     title: req.body.title,
     content: req.body.content
@@ -49,7 +49,7 @@ router.post('', (req, res, next) => {
     });
 });
 
-router.put('/:id', (req, res, next) => {
+router.put('/:id', checkAuth, (req, res, next) => {
   const post = new Post({
     _id: req.params.id,
     title: req.body.title,
@@ -69,13 +69,12 @@ router.put('/:id', (req, res, next) => {
     });
 });
 
-router.delete('/:id', (req, res, next) => {
+router.delete('/:id', checkAuth, (req, res, next) => {
   Post.deleteOne({ _id: req.params.id })
     .then(() => {
       res.status(200).json({ message: 'Post deleted!' });
     })
     .catch((e) => {
-      console.error(e);
       res.status(404).json({
         message: 'Post can\'t be deleted!',
         error: e
